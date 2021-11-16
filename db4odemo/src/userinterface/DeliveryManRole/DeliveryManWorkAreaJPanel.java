@@ -32,7 +32,6 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
         this.userProcessContainer = userProcessContainer;
         this.userAccount = account;
         this.business = business;
-      
         
         populateTable();
     }

@@ -21,6 +21,7 @@ public abstract class Role {
         Customer("Customer"),
         DeliveryMan("Delivery"),
         SysAdmin("Sysadmin");
+
         
         private String value;
         private RoleType(String value){

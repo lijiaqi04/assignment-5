@@ -4,11 +4,14 @@
  */
 package userinterface;
 
+import Business.DeliveryMan.DeliveryMan;
 import Business.EcoSystem;
 import Business.DB4OUtil.DB4OUtil;
 
 import Business.Organization;
 import Business.UserAccount.UserAccount;
+import Business.UserAccount.UserAccountDirectory;
+
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,8 +27,20 @@ public class MainJFrame extends javax.swing.JFrame {
      */
     private EcoSystem system;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+    UserAccountDirectory userAccountDirectory;
+
+
+    public void initialize(){
+        this.userAccountDirectory=new UserAccountDirectory();
+
+        DeliveryMan deliveryMan_1 = new DeliveryMan();
+
+
+    }
+
 
     public MainJFrame() {
+        initialize();
         initComponents();
         system = dB4OUtil.retrieveSystem();
         this.setSize(1680, 1050);
@@ -121,7 +136,25 @@ public class MainJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loginJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginJButtonActionPerformed
+    private void loginJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_loginJButtonActionPerformed
+        if ( userNameJTextField.getText().equals("")||passwordField.getPassword().equals("")){
+            JOptionPane.showMessageDialog(this,"empty input");
+        }
+        UserAccount userAccount=userAccountDirectory.authenticateUser(userNameJTextField.getText(),passwordField.getText());
+        if(userAccount==null){
+            JOptionPane.showMessageDialog(this,"no such account");
+            userNameJTextField.setText("");
+            passwordField.setText("");
+        }
+        else {
+            switch (userAccount.getRole().toString()){
+
+            }
+
+        }
+
+
         // Get user name
        
     }//GEN-LAST:event_loginJButtonActionPerformed
