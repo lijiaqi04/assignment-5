@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author raunak
  */
-public abstract class WorkRequest {
+public class WorkRequest {
 
     private String message;
     private UserAccount sender;
@@ -19,8 +19,12 @@ public abstract class WorkRequest {
     private String status;
     private Date requestDate;
     private Date resolveDate;
-    
-    public WorkRequest(){
+
+    public WorkRequest(String message, UserAccount sender, UserAccount receiver, String status) {
+        this.message = message;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.status = status;
         requestDate = new Date();
     }
 

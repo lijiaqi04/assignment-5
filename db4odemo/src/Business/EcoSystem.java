@@ -11,6 +11,8 @@ import Business.DeliveryMan.DeliveryManDirectory;
 import Business.Restaurant.RestaurantDirectory;
 import Business.Role.Role;
 import Business.Role.SystemAdminRole;
+import Business.WorkQueue.WorkQueue;
+
 import java.util.ArrayList;
 
 /**
@@ -23,6 +25,7 @@ public class EcoSystem extends Organization{
     private RestaurantDirectory restaurantDirectory;
     private CustomerDirectory customerDirectory;
     private DeliveryManDirectory deliveryManDirectory;
+    private WorkQueue workQueue;
 
     public EcoSystem(RestaurantDirectory restaurantDirectory, CustomerDirectory customerDirectory, DeliveryManDirectory deliveryManDirectory) {
 
@@ -30,7 +33,17 @@ public class EcoSystem extends Organization{
         this.customerDirectory = customerDirectory;
         this.deliveryManDirectory = deliveryManDirectory;
     }
-    
+
+    @Override
+    public WorkQueue getWorkQueue() {
+        return workQueue;
+    }
+
+    @Override
+    public void setWorkQueue(WorkQueue workQueue) {
+        this.workQueue = workQueue;
+    }
+
     public static EcoSystem getInstance(){
         if(business==null){
             business=new EcoSystem();

@@ -37,7 +37,17 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
     }
     
     public void populateTable(){
-        
+        DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
+        model.setRowCount(0);
+        for(WorkRequest s:business.getWorkQueue().getWorkRequestList()){
+            Object[] row = new Object[4];
+            row[0]=s.getMessage();
+            row[1]=s.getSender();
+            row[2]=s.getReceiver();
+            row[3]=s.getStatus();
+            model.addRow(row);
+        }
+
     }
 
     /**
@@ -126,7 +136,7 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
-        WorkRequest request = (WorkRequest)workRequestJTable.getValueAt(selectedRow, 0);
+        WorkRequest request=business.getWorkQueue().getWorkRequestList().get(selectedRow);
         request.setReceiver(userAccount);
         request.setStatus("Pending");
         populateTable();
@@ -134,9 +144,10 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_assignJButtonActionPerformed
 
     private void processJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processJButtonActionPerformed
-        
+        ProcessWorkRequestJPanel s= new ProcessWorkRequestJPanel(userProcessContainer);
+        userProcessContainer=s;
+        userProcessContainer.repaint();
 
-        
     }//GEN-LAST:event_processJButtonActionPerformed
 
     private void refreshJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshJButtonActionPerformed

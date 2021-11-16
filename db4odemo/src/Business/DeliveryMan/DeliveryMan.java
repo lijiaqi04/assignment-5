@@ -5,6 +5,8 @@
  */
 package Business.DeliveryMan;
 
+import Business.WorkQueue.WorkQueue;
+
 /**
  *
  * @author harold

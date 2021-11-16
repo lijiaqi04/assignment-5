@@ -4,19 +4,24 @@
  */
 package userinterface;
 
+import Business.Customer.CustomerDirectory;
 import Business.DeliveryMan.DeliveryMan;
+import Business.DeliveryMan.DeliveryManDirectory;
 import Business.EcoSystem;
 import Business.DB4OUtil.DB4OUtil;
 
 import Business.Employee.Employee;
 import Business.Organization;
-import Business.Role.AdminRole;
-import Business.Role.DeliverManRole;
-import Business.Role.Role;
+import Business.Restaurant.RestaurantDirectory;
+import Business.Role.*;
 import Business.UserAccount.UserAccount;
 import Business.UserAccount.UserAccountDirectory;
+import Business.WorkQueue.WorkQueue;
+import Business.WorkQueue.WorkRequest;
 
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -32,20 +37,42 @@ public class MainJFrame extends javax.swing.JFrame {
     private EcoSystem system;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
     UserAccountDirectory userAccountDirectory;
+    WorkQueue workQueue;
 
 
     public void initialize(){
         this.system = EcoSystem.getInstance();
         this.userAccountDirectory=new UserAccountDirectory();
-        UserAccount userAccount_1 = new UserAccount();
+        workQueue = new WorkQueue();
+        system.setWorkQueue(workQueue);
         Role role_1 = new AdminRole();
         Employee employee_1=new Employee();
-        userAccountDirectory.createUserAccount("restaurant_1","123",employee_1,role_1);
-        DeliveryMan deliveryMan_1 = new DeliveryMan();
-        UserAccount userAccount_2 = new UserAccount();
+        RestaurantDirectory restaurantDirectory = new RestaurantDirectory();
+        restaurantDirectory.createRestaurant("restaurant_1");
+        UserAccount userAccount_1=userAccountDirectory.createUserAccount("restaurant_1","123",employee_1,role_1);
+
         Role role_2 = new DeliverManRole();
         Employee employee_2 = new Employee();
-        userAccountDirectory.createUserAccount("deliverman_1","123",employee_2,role_2);
+        DeliveryManDirectory deliveryManDirectory = new DeliveryManDirectory();
+        deliveryManDirectory.createDeliverMan("deliverman_1");
+        UserAccount userAccount_2=userAccountDirectory.createUserAccount("deliverman_1","123",employee_2,role_2);
+
+        Role role_3 = new CustomerRole();
+        Employee employee_3 = new Employee();
+        CustomerDirectory customerDirectory=new CustomerDirectory();
+        customerDirectory.createCustomer("customer_1");
+        UserAccount userAccount_3=userAccountDirectory.createUserAccount("customer_1","123",employee_3,role_3);
+
+        WorkRequest workRequest_1=new WorkRequest("dfd",userAccount_1,null,"available");
+        WorkRequest workRequest=new WorkRequest("fast",userAccount_1,userAccount_2,"pending");
+        userAccount_2.getWorkQueue().getWorkRequestList().add(workRequest);
+        system.getWorkQueue().getWorkRequestList().add(workRequest_1);
+
+        this.system=new EcoSystem(restaurantDirectory,customerDirectory,deliveryManDirectory);
+
+        Role role_4 = new SystemAdminRole();
+        Employee employee_4 = new Employee();
+        UserAccount userAccount_4=userAccountDirectory.createUserAccount("admin_1","123",employee_4,role_4);
 
     }
 
@@ -162,6 +189,7 @@ public class MainJFrame extends javax.swing.JFrame {
         else {
             container=userAccount.getRole().createWorkArea(container,userAccount,system);
             jSplitPane1.setRightComponent(container);
+
         }
 
         // Get user name
