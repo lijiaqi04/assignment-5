@@ -8,7 +8,11 @@ import Business.DeliveryMan.DeliveryMan;
 import Business.EcoSystem;
 import Business.DB4OUtil.DB4OUtil;
 
+import Business.Employee.Employee;
 import Business.Organization;
+import Business.Role.AdminRole;
+import Business.Role.DeliverManRole;
+import Business.Role.Role;
 import Business.UserAccount.UserAccount;
 import Business.UserAccount.UserAccountDirectory;
 
@@ -31,10 +35,17 @@ public class MainJFrame extends javax.swing.JFrame {
 
 
     public void initialize(){
+        this.system = EcoSystem.getInstance();
         this.userAccountDirectory=new UserAccountDirectory();
-
+        UserAccount userAccount_1 = new UserAccount();
+        Role role_1 = new AdminRole();
+        Employee employee_1=new Employee();
+        userAccountDirectory.createUserAccount("restaurant_1","123",employee_1,role_1);
         DeliveryMan deliveryMan_1 = new DeliveryMan();
-
+        UserAccount userAccount_2 = new UserAccount();
+        Role role_2 = new DeliverManRole();
+        Employee employee_2 = new Employee();
+        userAccountDirectory.createUserAccount("deliverman_1","123",employee_2,role_2);
 
     }
 
@@ -140,6 +151,7 @@ public class MainJFrame extends javax.swing.JFrame {
         //GEN-FIRST:event_loginJButtonActionPerformed
         if ( userNameJTextField.getText().equals("")||passwordField.getPassword().equals("")){
             JOptionPane.showMessageDialog(this,"empty input");
+            return;
         }
         UserAccount userAccount=userAccountDirectory.authenticateUser(userNameJTextField.getText(),passwordField.getText());
         if(userAccount==null){
@@ -148,12 +160,9 @@ public class MainJFrame extends javax.swing.JFrame {
             passwordField.setText("");
         }
         else {
-            switch (userAccount.getRole().toString()){
-
-            }
-
+            container=userAccount.getRole().createWorkArea(container,userAccount,system);
+            jSplitPane1.setRightComponent(container);
         }
-
 
         // Get user name
        
