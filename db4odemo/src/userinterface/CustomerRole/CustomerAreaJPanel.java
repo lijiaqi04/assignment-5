@@ -8,8 +8,11 @@ import Business.EcoSystem;
 
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
+import userinterface.DeliveryManRole.ProcessWorkRequestJPanel;
+
 import java.awt.CardLayout;
-import javax.swing.JPanel;
+import java.util.ArrayList;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,23 +22,36 @@ import javax.swing.table.DefaultTableModel;
 public class CustomerAreaJPanel extends javax.swing.JPanel {
 
     private JPanel userProcessContainer;
-
+    private EcoSystem business;
     private UserAccount userAccount;
     /**
      * Creates new form DoctorWorkAreaJPanel
      */
-    public CustomerAreaJPanel(JPanel userProcessContainer, UserAccount account) {
+    public CustomerAreaJPanel(JPanel userProcessContainer, UserAccount account,EcoSystem business) {
         initComponents();
-        
         this.userProcessContainer = userProcessContainer;
-      
         this.userAccount = account;
+        this.business= business;
         //valueLabel.setText(enterprise.getName());
+        for(WorkRequest workRequest:business.getWorkQueue().getWorkRequestList()){
+            if(workRequest.getSender().getPassword().equals(userAccount.getPassword())&&workRequest.getSender().getUsername().equals(userAccount.getUsername())){
+                userAccount.getWorkQueue().getWorkRequestList().add(workRequest);
+            }
+        }
         populateRequestTable();
     }
     
     public void populateRequestTable(){
-        
+        DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
+        model.setRowCount(0);
+        for(WorkRequest s:userAccount.getWorkQueue().getWorkRequestList()){
+            Object[] row = new Object[4];
+            row[0]=s.getMessage();
+            row[1]=s.getSender();
+            row[2]=s.getStatus();
+            row[3]=s.getResult();
+            model.addRow(row);
+        }
     }
 
     
@@ -148,7 +164,16 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void requestTestJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_requestTestJButtonActionPerformed
-        
+        int selectedRow = workRequestJTable.getSelectedRow();
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this,"please select a request");
+            return;
+        }
+        WorkRequest workRequest =userAccount.getWorkQueue().getWorkRequestList().get(selectedRow);
+        RequestLabTestJPanel s= new RequestLabTestJPanel(userProcessContainer,userAccount,workRequest);
+        CardLayout crdLyt = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add(s);
+        crdLyt.next(userProcessContainer);
         
         
     }//GEN-LAST:event_requestTestJButtonActionPerformed

@@ -9,7 +9,7 @@ import Business.EcoSystem;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,10 +28,14 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
      */
     public DeliveryManWorkAreaJPanel(JPanel userProcessContainer, UserAccount account, EcoSystem business) {
         initComponents();
-        
         this.userProcessContainer = userProcessContainer;
         this.userAccount = account;
         this.business = business;
+        for(WorkRequest workRequest:business.getWorkQueue().getWorkRequestList()){
+            if(!workRequest.getStatus().equals("pending")){
+                this.userAccount.getWorkQueue().getWorkRequestList().add(workRequest);
+            }
+        }
         
         populateTable();
     }
@@ -39,7 +43,7 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
     public void populateTable(){
         DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
         model.setRowCount(0);
-        for(WorkRequest s:business.getWorkQueue().getWorkRequestList()){
+        for(WorkRequest s:userAccount.getWorkQueue().getWorkRequestList()){
             Object[] row = new Object[4];
             row[0]=s.getMessage();
             row[1]=s.getSender();
@@ -133,20 +137,29 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
         int selectedRow = workRequestJTable.getSelectedRow();
         
         if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this,"please select a request");
             return;
         }
         
-        WorkRequest request=business.getWorkQueue().getWorkRequestList().get(selectedRow);
+        WorkRequest request=userAccount.getWorkQueue().getWorkRequestList().get(selectedRow);
         request.setReceiver(userAccount);
         request.setStatus("Pending");
+        JOptionPane.showMessageDialog(this,"assigning success");
         populateTable();
         
     }//GEN-LAST:event_assignJButtonActionPerformed
 
     private void processJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processJButtonActionPerformed
-        ProcessWorkRequestJPanel s= new ProcessWorkRequestJPanel(userProcessContainer);
-        userProcessContainer=s;
-        userProcessContainer.repaint();
+        int selectedRow = workRequestJTable.getSelectedRow();
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this,"please select a request");
+            return;
+        }
+        WorkRequest workRequest =userAccount.getWorkQueue().getWorkRequestList().get(selectedRow);
+        ProcessWorkRequestJPanel s= new ProcessWorkRequestJPanel(userProcessContainer,workRequest);
+        CardLayout crdLyt = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add(s);
+        crdLyt.next(userProcessContainer);
 
     }//GEN-LAST:event_processJButtonActionPerformed
 

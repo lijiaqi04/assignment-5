@@ -8,7 +8,8 @@ import Business.EcoSystem;
 
 import Business.UserAccount.UserAccount;
 import userinterface.SystemAdminWorkArea.SystemAdminWorkAreaJPanel;
-import javax.swing.JPanel;
+
+import javax.swing.*;
 
 /**
  *

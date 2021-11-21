@@ -8,7 +8,10 @@ package userinterface.SystemAdminWorkArea;
 import Business.EcoSystem;
 
 import Business.Organization;
-import java.awt.CardLayout;
+import userinterface.DeliveryManRole.DeliveryManWorkAreaJPanel;
+import userinterface.DeliveryManRole.ProcessWorkRequestJPanel;
+
+import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -151,15 +154,24 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnManageNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageNetworkActionPerformed
-       
+        DeliveryCustomerJPanel s= new DeliveryCustomerJPanel(userProcessContainer,ecosystem);
+        CardLayout crdLyt = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add(s);
+        crdLyt.next(userProcessContainer);
     }//GEN-LAST:event_btnManageNetworkActionPerformed
 
     private void btnManageEnterpriseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageEnterpriseActionPerformed
-        
+        RestaurantJPanel s= new RestaurantJPanel(userProcessContainer,ecosystem);
+        CardLayout crdLyt = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add(s);
+        crdLyt.next(userProcessContainer);
     }//GEN-LAST:event_btnManageEnterpriseActionPerformed
 
     private void btnManageAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageAdminActionPerformed
-       
+        DeliveryManJPanel s= new DeliveryManJPanel(userProcessContainer,ecosystem);
+        CardLayout crdLyt = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add(s);
+        crdLyt.next(userProcessContainer);
     }//GEN-LAST:event_btnManageAdminActionPerformed
 
     private void jTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeValueChanged

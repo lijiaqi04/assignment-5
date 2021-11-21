@@ -8,7 +8,8 @@ import Business.EcoSystem;
 
 import Business.Organization;
 import Business.UserAccount.UserAccount;
-import javax.swing.JPanel;
+
+import javax.swing.*;
 
 /**
  *
@@ -38,10 +39,9 @@ public abstract class Role {
         }
     }
     
-    public abstract JPanel createWorkArea(JPanel userProcessContainer, 
-            UserAccount account,  
-            EcoSystem business);
-
+    public abstract JPanel createWorkArea( JPanel userProcessContainer,
+                                          UserAccount account,
+                                          EcoSystem business);
     @Override
     public String toString() {
         return this.getClass().getName();

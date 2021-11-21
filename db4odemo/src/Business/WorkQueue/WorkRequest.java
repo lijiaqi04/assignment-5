@@ -19,6 +19,24 @@ public class WorkRequest {
     private String status;
     private Date requestDate;
     private Date resolveDate;
+    private String text;
+    private String result;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 
     public WorkRequest(String message, UserAccount sender, UserAccount receiver, String status) {
         this.message = message;

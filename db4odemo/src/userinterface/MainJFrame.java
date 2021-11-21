@@ -22,8 +22,7 @@ import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  *
@@ -43,8 +42,6 @@ public class MainJFrame extends javax.swing.JFrame {
     public void initialize(){
         this.system = EcoSystem.getInstance();
         this.userAccountDirectory=new UserAccountDirectory();
-        workQueue = new WorkQueue();
-        system.setWorkQueue(workQueue);
         Role role_1 = new AdminRole();
         Employee employee_1=new Employee();
         RestaurantDirectory restaurantDirectory = new RestaurantDirectory();
@@ -63,17 +60,22 @@ public class MainJFrame extends javax.swing.JFrame {
         customerDirectory.createCustomer("customer_1");
         UserAccount userAccount_3=userAccountDirectory.createUserAccount("customer_1","123",employee_3,role_3);
 
-        WorkRequest workRequest_1=new WorkRequest("dfd",userAccount_1,null,"available");
-        WorkRequest workRequest=new WorkRequest("fast",userAccount_1,userAccount_2,"pending");
-        userAccount_2.getWorkQueue().getWorkRequestList().add(workRequest);
-        system.getWorkQueue().getWorkRequestList().add(workRequest_1);
+        WorkRequest workRequest_1=new WorkRequest("dfd",userAccount_3,null,"available");
+        WorkRequest workRequest=new WorkRequest("fast",userAccount_3,userAccount_2,"pending");
 
         this.system=new EcoSystem(restaurantDirectory,customerDirectory,deliveryManDirectory);
+        workQueue = new WorkQueue();
+        system.setWorkQueue(workQueue);
+        system.getWorkQueue().getWorkRequestList().add((workRequest));
+        system.getWorkQueue().getWorkRequestList().add(workRequest_1);
+        ArrayList<UserAccount> userAccountArrayList = new ArrayList<>();
+
 
         Role role_4 = new SystemAdminRole();
         Employee employee_4 = new Employee();
         UserAccount userAccount_4=userAccountDirectory.createUserAccount("admin_1","123",employee_4,role_4);
-
+        system.setUserAccountDirectory(this.userAccountDirectory);
+        dB4OUtil.storeSystem(system);
     }
 
 
@@ -180,17 +182,20 @@ public class MainJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"empty input");
             return;
         }
-        UserAccount userAccount=userAccountDirectory.authenticateUser(userNameJTextField.getText(),passwordField.getText());
+        UserAccount userAccount=system.getUserAccountDirectory().authenticateUser(userNameJTextField.getText(),passwordField.getText());
         if(userAccount==null){
             JOptionPane.showMessageDialog(this,"no such account");
             userNameJTextField.setText("");
             passwordField.setText("");
+            return;
         }
         else {
-            container=userAccount.getRole().createWorkArea(container,userAccount,system);
+            container.add(userAccount.getRole().createWorkArea(container,userAccount,system));
+            CardLayout crdLyt = (CardLayout) container.getLayout();
+            crdLyt.next(container);
             jSplitPane1.setRightComponent(container);
-
         }
+        logoutJButton.setEnabled(true);
 
         // Get user name
        
@@ -246,6 +251,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 new MainJFrame().setVisible(true);
             }
         });
+
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel container;

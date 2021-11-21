@@ -7,11 +7,13 @@ package userinterface.CustomerRole;
 import Business.EcoSystem;
 import Business.Organization;
 import Business.UserAccount.UserAccount;
+import Business.WorkQueue.WorkRequest;
+
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  *
@@ -22,15 +24,17 @@ public class RequestLabTestJPanel extends javax.swing.JPanel {
     private JPanel userProcessContainer;
     
     private UserAccount userAccount;
+    private  WorkRequest workRequest;
     /**
      * Creates new form RequestLabTestJPanel
      */
-    public RequestLabTestJPanel(JPanel userProcessContainer, UserAccount account) {
+    public RequestLabTestJPanel(JPanel userProcessContainer, UserAccount account,WorkRequest workRequest) {
         initComponents();
         
         this.userProcessContainer = userProcessContainer;
         
         this.userAccount = account;
+        this.workRequest=workRequest;
        
     }
 
@@ -81,7 +85,14 @@ public class RequestLabTestJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void requestTestJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_requestTestJButtonActionPerformed
-        
+        if(messageJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"please input a text");
+            return;
+        }
+        String text = messageJTextField.getText();
+        workRequest.setText(text);
+        messageJTextField.setText("");
+        JOptionPane.showMessageDialog(this,"text changed");
         
         
     }//GEN-LAST:event_requestTestJButtonActionPerformed

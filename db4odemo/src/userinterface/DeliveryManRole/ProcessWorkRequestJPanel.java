@@ -4,9 +4,11 @@
  */
 package userinterface.DeliveryManRole;
 
+import Business.WorkQueue.WorkRequest;
+
 import java.awt.CardLayout;
 import java.awt.Component;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  *
@@ -17,12 +19,17 @@ import javax.swing.JPanel;
 public class ProcessWorkRequestJPanel extends javax.swing.JPanel {
 
     JPanel userProcessContainer;
+    WorkRequest workRequest;
+//    JPanel deliverPanel;
     /**
      * Creates new form ProcessWorkRequestJPanel
      */
-    public ProcessWorkRequestJPanel(JPanel userProcessContainer) {
+    public ProcessWorkRequestJPanel(JPanel userProcessContainer,WorkRequest workRequest) {
         initComponents();
-        
+//        this.deliverPanel=new JPanel();
+//        this.deliverPanel=deliverPanel;
+        this.userProcessContainer=userProcessContainer;
+        this.workRequest=workRequest;
     }
 
     /**
@@ -90,19 +97,24 @@ public class ProcessWorkRequestJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
-
         userProcessContainer.remove(this);
         Component[] componentArray = userProcessContainer.getComponents();
         Component component = componentArray[componentArray.length - 1];
         DeliveryManWorkAreaJPanel dwjp = (DeliveryManWorkAreaJPanel) component;
         dwjp.populateTable();
-        
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_backJButtonActionPerformed
 
     private void submitJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitJButtonActionPerformed
-       
+        if(resultJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"please input a text");
+            return;
+        }
+        String text = resultJTextField.getText();
+        workRequest.setResult(text);
+        JOptionPane.showMessageDialog(this,"result changed");
+        resultJTextField.setText("");
     }//GEN-LAST:event_submitJButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
