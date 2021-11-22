@@ -4,6 +4,7 @@
  */
 package Business.WorkQueue;
 
+import Business.Restaurant.Restaurant;
 import Business.UserAccount.UserAccount;
 import java.util.Date;
 
@@ -21,6 +22,9 @@ public class WorkRequest {
     private Date resolveDate;
     private String text;
     private String result;
+    private int id;
+    private Restaurant restaurant;
+    private static int count = 1;
 
     public String getText() {
         return text;
@@ -38,12 +42,31 @@ public class WorkRequest {
         this.result = result;
     }
 
-    public WorkRequest(String message, UserAccount sender, UserAccount receiver, String status) {
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public WorkRequest(String message, UserAccount sender, UserAccount receiver, String status, Restaurant restaurant) {
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
         this.status = status;
         requestDate = new Date();
+        this.restaurant= restaurant;
+        this.id =count;
+        count++;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMessage() {

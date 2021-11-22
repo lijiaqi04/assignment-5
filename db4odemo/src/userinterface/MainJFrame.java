@@ -65,8 +65,8 @@ public class MainJFrame extends javax.swing.JFrame {
         customerDirectory.createCustomer("customer_1");
         UserAccount userAccount_3=userAccountDirectory.createUserAccount("customer_1","123",employee_3,role_3);
 
-        WorkRequest workRequest_1=new WorkRequest("dfd",userAccount_3,null,"available");
-        WorkRequest workRequest=new WorkRequest("fast",userAccount_3,userAccount_2,"pending");
+        WorkRequest workRequest_1=new WorkRequest("",userAccount_3,null,"available",restaurantDirectory.getRestaurantArrayList().get(0));
+        WorkRequest workRequest=new WorkRequest("",userAccount_3,userAccount_2,"pending",restaurantDirectory.getRestaurantArrayList().get(0));
 
         this.system=new EcoSystem(restaurantDirectory,customerDirectory,deliveryManDirectory);
         workQueue = new WorkQueue();

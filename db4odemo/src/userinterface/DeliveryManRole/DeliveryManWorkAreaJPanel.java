@@ -32,7 +32,7 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
         this.userAccount = account;
         this.business = business;
         for(WorkRequest workRequest:business.getWorkQueue().getWorkRequestList()){
-            if(!workRequest.getStatus().equals("pending")){
+            if(workRequest.getStatus().equals("available")){
                 this.userAccount.getWorkQueue().getWorkRequestList().add(workRequest);
             }
         }
@@ -44,12 +44,12 @@ public class DeliveryManWorkAreaJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
         model.setRowCount(0);
         for(WorkRequest s:userAccount.getWorkQueue().getWorkRequestList()){
-            Object[] row = new Object[4];
-            row[0]=s.getMessage();
-            row[1]=s.getSender();
-            row[2]=s.getReceiver();
-            row[3]=s.getStatus();
-            model.addRow(row);
+                Object[] row = new Object[4];
+                row[0]=s.getMessage();
+                row[1]=s.getSender();
+                row[2]=s.getReceiver();
+                row[3]=s.getStatus();
+                model.addRow(row);
         }
 
     }

@@ -15,6 +15,7 @@ import userinterface.SystemAdminWorkArea.SystemAdminWorkAreaJPanel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -24,7 +25,6 @@ public class RestaurantJPanel extends JPanel {
 
     private JPanel userProcessContainer;
     private EcoSystem business;
-    
     
     /**
      * Creates new form LabAssistantWorkAreaJPanel
@@ -88,10 +88,10 @@ public class RestaurantJPanel extends JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                Object.class, String.class, String.class
+                Object.class, String.class, String.class, String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, true, true, false
             };
 
 
@@ -218,7 +218,7 @@ public class RestaurantJPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
         for(int i = 0; i<model.getRowCount(); i++) {
             for (int j = 0; j < model.getColumnCount(); j++) {
-                if (j == 0) {
+                if (j == 1) {
                     String temp_name;
                     Object temp = model.getValueAt(i, j);
                     if (temp instanceof Number) {

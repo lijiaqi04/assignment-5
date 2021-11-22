@@ -8,7 +8,6 @@ import Business.Customer.Customer;
 import Business.EcoSystem;
 import Business.Employee.Employee;
 import Business.Role.CustomerRole;
-import Business.Role.DeliverManRole;
 import Business.Role.Role;
 import Business.UserAccount.UserAccount;
 import userinterface.SystemAdminWorkArea.SystemAdminWorkAreaJPanel;
@@ -89,10 +88,10 @@ public class DeliveryCustomerJPanel extends JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                Object.class, String.class, String.class
+                Object.class, String.class, String.class, String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, true, true, false
             };
 
 

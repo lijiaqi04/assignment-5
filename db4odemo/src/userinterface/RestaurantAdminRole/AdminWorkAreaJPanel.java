@@ -48,7 +48,7 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
         jLabel1.setText("My Work Area -Adminstrative Role");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, -1, -1));
 
-        restaurantInfoJButton.setText("Manage Restaurant Info");
+        restaurantInfoJButton.setText("Manage order");
         restaurantInfoJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 restaurantJButtonActionPerformed(evt);

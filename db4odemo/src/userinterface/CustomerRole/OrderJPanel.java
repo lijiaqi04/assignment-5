@@ -5,34 +5,34 @@
 package userinterface.CustomerRole;
 
 import Business.EcoSystem;
-
 import Business.Restaurant.Restaurant;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
-import userinterface.DeliveryManRole.ProcessWorkRequestJPanel;
+import userinterface.CustomerRole.RequestLabTestJPanel;
 
-import java.awt.CardLayout;
-import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  *
  * @author raunak
  */
-public class CustomerAreaJPanel extends javax.swing.JPanel {
+public class OrderJPanel extends JPanel {
 
     private JPanel userProcessContainer;
     private EcoSystem business;
     private UserAccount userAccount;
+    private Restaurant restaurant;
     /**
      * Creates new form DoctorWorkAreaJPanel
      */
-    public CustomerAreaJPanel(JPanel userProcessContainer, UserAccount account,EcoSystem business) {
+    public OrderJPanel(JPanel userProcessContainer, UserAccount account, EcoSystem business, Restaurant restaurant) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = account;
         this.business= business;
+        this.restaurant=restaurant;
         //valueLabel.setText(enterprise.getName());
         for(WorkRequest workRequest:business.getWorkQueue().getWorkRequestList()){
             if(workRequest.getSender().getPassword().equals(userAccount.getPassword())&&workRequest.getSender().getUsername().equals(userAccount.getUsername())){
@@ -55,9 +55,9 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
         }
         DefaultTableModel model_1 = (DefaultTableModel) orderJTable.getModel();
         model_1.setRowCount(0);
-        for(Restaurant s:business.getRestaurantDirectory().getRestaurantArrayList()){
+        for(String s:restaurant.getMenu()){
             Object[] row = new Object[2];
-            row[0]=s.getName();
+            row[0]=s;
             model_1.addRow(row);
         }
     }
@@ -72,19 +72,20 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        workRequestJTable = new javax.swing.JTable();
-        requestTestJButton = new javax.swing.JButton();
-        refreshTestJButton = new javax.swing.JButton();
+        jScrollPane1 = new JScrollPane();
+        workRequestJTable = new JTable();
+        requestTestJButton = new JButton();
+        refreshTestJButton = new JButton();
         orderJButton = new JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        orderJTable = new javax.swing.JTable();
+        jScrollPane2 = new JScrollPane();
+        orderJTable = new JTable();
+        backJButton =new JButton();
 
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
 
-        workRequestJTable.setModel(new javax.swing.table.DefaultTableModel(
+        workRequestJTable.setModel(new DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -96,7 +97,7 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                String.class, String.class, String.class, String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
@@ -119,22 +120,22 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
         }
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 58, 375, 96));
 
-        orderJTable.setModel(new javax.swing.table.DefaultTableModel(
+        orderJTable.setModel(new DefaultTableModel(
                 new Object [][] {
-                        {null},
-                        {null},
-                        {null},
-                        {null}
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null}
                 },
                 new String [] {
-                        "restaurant"
+                        "menu", "number"
                 }
         ) {
             Class[] types = new Class [] {
-                    java.lang.String.class
+                    String.class, Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                    false
+                    false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -148,10 +149,11 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
         jScrollPane2.setViewportView(orderJTable);
         if (orderJTable.getColumnModel().getColumnCount() > 0) {
             orderJTable.getColumnModel().getColumn(0).setResizable(false);
+            orderJTable.getColumnModel().getColumn(1).setResizable(false);
         }
         add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 58, 375, 96));
 
-        orderJButton.setText("enter");
+        orderJButton.setText("make order");
         orderJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 orderJButtonActionPerformed(evt);
@@ -166,6 +168,14 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
             }
         });
         add(requestTestJButton,new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 215, -1, -1));
+
+        backJButton.setText("back");
+        backJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backJButtonnActionPerformed(evt);
+            }
+        });
+        add(backJButton,new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 315, -1, -1));
 
         refreshTestJButton.setText("Refresh");
         refreshTestJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -191,17 +201,42 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_requestTestJButtonActionPerformed
 
+    private void  backJButtonnActionPerformed(java.awt.event.ActionEvent evt) {
+        userProcessContainer.remove(this);
+        Component[] componentArray = userProcessContainer.getComponents();
+        Component component = componentArray[componentArray.length - 1];
+        CustomerAreaJPanel dwjp = (CustomerAreaJPanel) component;
+        dwjp.populateRequestTable();
+        CardLayout layout = (CardLayout)userProcessContainer.getLayout();
+        layout.previous(userProcessContainer);
+    }
+
     private void orderJButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        int selectedRow = orderJTable.getSelectedRow();
-        if (selectedRow < 0){
-            JOptionPane.showMessageDialog(this,"please select a restaurant");
-            return;
+        DefaultTableModel model = (DefaultTableModel) orderJTable.getModel();
+        for(int i = 0; i<model.getRowCount(); i++) {
+            for (int j = 1; j < model.getColumnCount(); j++) {
+                if (j == 1) {
+                    Object temp = model.getValueAt(i, j);
+                    int number;
+                    if(temp==null){
+                        number = 0;
+                    }
+                    else {
+                        if (temp instanceof Number) {
+                            number = (Integer) (temp);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "wrong input");
+                            return;
+                        }
+                    }
+                }
+            }
         }
-        Restaurant restaurant =business.getRestaurantDirectory().getRestaurantArrayList().get(selectedRow);
-        OrderJPanel s= new OrderJPanel(userProcessContainer,userAccount,business,restaurant);
-        CardLayout crdLyt = (CardLayout) userProcessContainer.getLayout();
-        userProcessContainer.add(s);
-        crdLyt.next(userProcessContainer);
+        WorkRequest workRequest = new WorkRequest("",userAccount,null,"wait for accept",restaurant);
+        business.getWorkQueue().getWorkRequestList().add(workRequest);
+        userAccount.getWorkQueue().getWorkRequestList().add(workRequest);
+        JOptionPane.showMessageDialog(this,"oder made");
+        populateRequestTable();
     }
 
 
@@ -212,13 +247,14 @@ public class CustomerAreaJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_refreshTestJButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton refreshTestJButton;
-    private javax.swing.JButton requestTestJButton;
-    private javax.swing.JTable workRequestJTable;
-    private javax.swing.JButton orderJButton;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable orderJTable;
+    private JScrollPane jScrollPane1;
+    private JButton refreshTestJButton;
+    private JButton requestTestJButton;
+    private JTable workRequestJTable;
+    private JButton orderJButton;
+    private JScrollPane jScrollPane2;
+    private JTable orderJTable;
+    private JButton backJButton;
 
     // End of variables declaration//GEN-END:variables
 }

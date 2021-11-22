@@ -10,6 +10,7 @@ import Business.Restaurant.Restaurant;
 import Business.Role.AdminRole;
 import Business.Role.Role;
 import Business.UserAccount.UserAccount;
+import Business.WorkQueue.WorkRequest;
 import userinterface.SystemAdminWorkArea.SystemAdminWorkAreaJPanel;
 
 import javax.swing.*;
@@ -41,9 +42,16 @@ public class RestaurantInfoJPanel extends JPanel {
     public void populateTable(){
         DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
         model.setRowCount(0);
-        Object[] row = new Object[1];
-        row[0]=userAccount.getUsername();
-        model.addRow(row);
+        for(WorkRequest s:business.getWorkQueue().getWorkRequestList()){
+            if(s.getStatus().equals("wait for accept")){
+                Object[] row = new Object[4];
+                row[0]=s.getId();
+                row[1]=s.getSender();
+                row[2]=s.getReceiver();
+                row[3]=s.getStatus();
+                model.addRow(row);
+            }
+        }
         }
 
 
@@ -61,27 +69,27 @@ public class RestaurantInfoJPanel extends JPanel {
         saveJButton = new JButton();
         refreshJButton = new JButton();
         backJButton = new JButton();
+        refuseJButton=new JButton();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        workRequestJTable.setModel(new DefaultTableModel(
-            new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
-            },
-            new String [] {
-               "username"
-            }
+        workRequestJTable.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String [] {
+                        "id", "Sender", "Receiver", "Status"
+                }
         ) {
             Class[] types = new Class [] {
-                Object.class
+                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-               true
+                    false, false,false, false
             };
-
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
@@ -91,24 +99,32 @@ public class RestaurantInfoJPanel extends JPanel {
                 return canEdit [columnIndex];
             }
         });
-
-
         jScrollPane1.setViewportView(workRequestJTable);
         if (workRequestJTable.getColumnModel().getColumnCount() > 0) {
             workRequestJTable.getColumnModel().getColumn(0).setResizable(false);
+            workRequestJTable.getColumnModel().getColumn(1).setResizable(false);
+            workRequestJTable.getColumnModel().getColumn(2).setResizable(false);
+            workRequestJTable.getColumnModel().getColumn(3).setResizable(false);
         }
-
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 58, 375, 96));
 
 
 
-        saveJButton.setText("save changes");
+        saveJButton.setText("accept");
         saveJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 processJButtonActionPerformed(evt);
             }
         });
         add(saveJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(246, 215, -1, -1));
+
+        refuseJButton.setText("accept");
+        refuseJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refuseJButtonActionPerformed(evt);
+            }
+        });
+        add(refuseJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(246, 215, -1, -1));
 
 
         backJButton.setText("back");
@@ -142,30 +158,37 @@ public class RestaurantInfoJPanel extends JPanel {
 
 
     private void processJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processJButtonActionPerformed
+        int selectedRow = workRequestJTable.getSelectedRow();
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this,"please select a request");
+            return;
+        }
         DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
-        for(int i = 0; i<model.getRowCount(); i++) {
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                    String temp_name;
-                    Object temp = model.getValueAt(i, j);
-                    if (temp instanceof Number) {
-                        temp_name = Integer.toString((Integer) temp);
-                    } else {
-                        temp_name = (String) model.getValueAt(i, j);
-                    }
-                    Restaurant s = business.getRestaurantDirectory().getRestaurantArrayList().get(i);
-                    for (UserAccount v : business.getUserAccountDirectory().getUserAccountList()) {
-                        if (s.getName().equals(v.getUsername())) {
-                            business.getUserAccountDirectory().getUserAccountList().get(i).setUsername(temp_name);
-                        }
-                    }
-                    business.getRestaurantDirectory().getRestaurantArrayList().get(i).setName(temp_name);
-
+        int i = (Integer)model.getValueAt(selectedRow,0);
+        for(WorkRequest s:business.getWorkQueue().getWorkRequestList()){
+            if(s.getId()==i){
+                s.setStatus("available");
             }
         }
-        JOptionPane.showMessageDialog(this,"changing success");
+        populateTable();
+    }//GEN-LAST:accept order
+
+    private void refuseJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processJButtonActionPerformed
+        int selectedRow = workRequestJTable.getSelectedRow();
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this,"please select a request");
+            return;
+        }
+        DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
+        int i = (Integer)model.getValueAt(selectedRow,0);
+        for(WorkRequest s:business.getWorkQueue().getWorkRequestList()){
+            if(s.getId()==i){
+                s.setStatus("refused");
+            }
+        }
         populateTable();
 
-    }//GEN-LAST:event_processJButtonActionPerformed
+    }//GEN-LAST:refuse order
 
     private void refreshJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshJButtonActionPerformed
         populateTable();
@@ -179,7 +202,7 @@ public class RestaurantInfoJPanel extends JPanel {
     private JTable workRequestJTable;
     private JTextField passwordTextfield;
     private JTextField usernameTextfield;
-    private JButton addJButton;
+    private JButton refuseJButton;
     private JButton backJButton;
     private JLabel passwordLabel;
     private JLabel usernameLabel;
