@@ -46,6 +46,11 @@ public class MainJFrame extends javax.swing.JFrame {
         Employee employee_1=new Employee();
         RestaurantDirectory restaurantDirectory = new RestaurantDirectory();
         restaurantDirectory.createRestaurant("restaurant_1");
+        ArrayList<String> menu =new ArrayList<>();
+        menu.add("rice");
+        menu.add("chiken");
+        menu.add("beef");
+        restaurantDirectory.getRestaurantArrayList().get(0).setMenu(menu);
         UserAccount userAccount_1=userAccountDirectory.createUserAccount("restaurant_1","123",employee_1,role_1);
 
         Role role_2 = new DeliverManRole();

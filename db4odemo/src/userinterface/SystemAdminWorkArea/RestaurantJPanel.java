@@ -88,10 +88,10 @@ public class RestaurantJPanel extends JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                Object.class, String.class, String.class, String.class
+                Object.class, String.class, String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, false
+                false, true, true
             };
 
 
@@ -218,7 +218,7 @@ public class RestaurantJPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) workRequestJTable.getModel();
         for(int i = 0; i<model.getRowCount(); i++) {
             for (int j = 0; j < model.getColumnCount(); j++) {
-                if (j == 1) {
+                if (j == 0) {
                     String temp_name;
                     Object temp = model.getValueAt(i, j);
                     if (temp instanceof Number) {

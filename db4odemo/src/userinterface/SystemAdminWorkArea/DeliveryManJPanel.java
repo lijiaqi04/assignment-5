@@ -88,10 +88,10 @@ public class DeliveryManJPanel extends JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                Object.class, String.class, String.class, String.class
+                Object.class, String.class, String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, false
+                false, true, true
             };
 
 

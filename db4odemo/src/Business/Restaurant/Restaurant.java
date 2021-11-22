@@ -5,6 +5,8 @@
  */
 package Business.Restaurant;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author harold
@@ -13,10 +15,19 @@ public class Restaurant {
     String name;
     int id;
     private static int count = 1;
+    ArrayList<String> menu;
 
+    public ArrayList<String> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(ArrayList<String> menu) {
+        this.menu = menu;
+    }
 
     public Restaurant() {
         id = count;
+        menu=new ArrayList<>();
         count++;
     }
 
